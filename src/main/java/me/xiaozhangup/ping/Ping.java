@@ -10,8 +10,8 @@ import java.net.InetSocketAddress;
 public class Ping {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        InetAddress address = InetAddress.getByName("tcat.ncgs.top");
-        int port = 22139;
+        final InetAddress address = InetAddress.getByName("tcat.ncgs.top");
+        final int port = 22139;
         while (true) {
             ServerPing ping = new ServerPing(new InetSocketAddress(address, port));
             StatusResponse response = ping.fetchData();
