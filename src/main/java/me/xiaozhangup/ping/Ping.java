@@ -121,7 +121,7 @@ public class Ping implements WindowListener,ActionListener {
             g.setColor(Color.BLACK);
             g.drawString("Time: " + statusResponse.getTime(), 110, 30);
             g.drawString("Online: " + statusResponse.getPlayers().getOnline() + "/" + statusResponse.getPlayers().getMax(), 110, 50);
-            g.drawString("Serevr: " + statusResponse.getVersion().getName(), 110, 70);
+            g.drawString("Server: " + statusResponse.getVersion().getName(), 110, 70);
 
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(Base64.getDecoder().decode(statusResponse.getFavicon().replace("data:image/png;base64,", "")));
             try {
