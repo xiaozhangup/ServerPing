@@ -27,6 +27,7 @@ public class Ping implements WindowListener,ActionListener {
     public static StatusResponse statusResponse;
 
     public static InetAddress address;
+    public static BufferedImage bufferedImage;
 
     static {
         try {
@@ -112,6 +113,7 @@ public class Ping implements WindowListener,ActionListener {
 
     public static void update() {
         fr.add(new TextRender(), BorderLayout.CENTER);
+        fr.setIconImage(bufferedImage);
         fr.setVisible(true);
     }
 
@@ -125,7 +127,7 @@ public class Ping implements WindowListener,ActionListener {
 
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(Base64.getDecoder().decode(statusResponse.getFavicon().replace("data:image/png;base64,", "")));
             try {
-                BufferedImage bufferedImage = ImageIO.read(byteArrayInputStream);
+                bufferedImage = ImageIO.read(byteArrayInputStream);
                 g.drawImage(bufferedImage, 30, 15, this);
             } catch (IOException e) {
                 throw new RuntimeException(e);
