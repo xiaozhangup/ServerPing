@@ -10,67 +10,63 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 import java.util.Base64;
 
 public class Ping implements WindowListener {
 
-    public static JFrame fr = new JFrame("Sevrer Status");
+    public static final TextRender COMP = new TextRender();
+    public static final InetSocketAddress HOST = new InetSocketAddress("k1.dimc.link", 23001);
+    private static final JFrame fr = new JFrame("Sevrer Status");
+    private static final ServerPing ping = new ServerPing(HOST);
+    private static StatusResponse statusResponse;
+    private static BufferedImage bufferedImage;
 
-    public static StatusResponse statusResponse;
+    private int xOld;
+    private int yOld;
 
-    public static InetAddress address;
-    public static BufferedImage bufferedImage;
-    public static int port = 23001;
-    int xOld = 0;
-    int yOld = 0;
-
-    static {
-        try {
-            address = InetAddress.getByName("k1.dimc.link");
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public Ping() {
 
         Button button = new Button("手动刷新");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                update();
-            }
-        });
+        button.addActionListener(e -> update());
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.setBackground(Color.LIGHT_GRAY);
 
         Button close = new Button("退出程序");
-        close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+        close.addActionListener(e -> System.exit(0));
+        close.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        close.setBackground(Color.LIGHT_GRAY);
+
+        Button top = new Button("置顶");
+        top.addActionListener(e -> {
+            if (fr.isAlwaysOnTop()) {
+                fr.setAlwaysOnTop(false);
+                top.setLabel("普通");
+            } else {
+                fr.setAlwaysOnTop(true);
+                top.setLabel("置顶");
             }
         });
-        close.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        top.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         close.setBackground(Color.LIGHT_GRAY);
 
         fr.setSize(260, 140);
         fr.setBackground(Color.white);
         fr.add(button, "North");
         fr.add(close, "South");
+        fr.add(top, "West");
         fr.addWindowListener(this);
         fr.setResizable(false);
         fr.setUndecorated(true);
         fr.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+        fr.setAlwaysOnTop(true);
         fr.setLocation(100, 100);
 
         fr.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                xOld = e.getX();//记录鼠标按下时的坐标
+                xOld = e.getX();
                 yOld = e.getY();
             }
         });
@@ -82,15 +78,15 @@ public class Ping implements WindowListener {
                 int yOnScreen = e.getYOnScreen();
                 int xx = xOnScreen - xOld;
                 int yy = yOnScreen - yOld;
-                fr.setLocation(xx, yy);//设置拖拽后，窗口的位置
+                fr.setLocation(xx, yy);
             }
         });
 
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException {
 
-        statusResponse = new ServerPing(new InetSocketAddress(address, port)).fetchData();
+        statusResponse = ping.fetchData();
 
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(Base64.getDecoder().decode(statusResponse.getFavicon().replace("data:image/png;base64,", "")));
         bufferedImage = ImageIO.read(byteArrayInputStream);
@@ -101,7 +97,6 @@ public class Ping implements WindowListener {
         new Thread(() -> {
             while (true) {
                 try {
-                    ServerPing ping = new ServerPing(new InetSocketAddress(address, port));
                     statusResponse = ping.fetchData();
                     update();
                     Thread.sleep(1000);
@@ -112,7 +107,7 @@ public class Ping implements WindowListener {
     }
 
     public static void update() {
-        fr.add(new TextRender(), BorderLayout.CENTER);
+        fr.add(COMP, BorderLayout.CENTER);
         fr.setVisible(true);
     }
 
@@ -155,10 +150,10 @@ public class Ping implements WindowListener {
 
         public void paintComponent(Graphics g) {
             g.setColor(Color.BLACK);
-            g.drawString("用时: " + statusResponse.getTime(), 110, 30);
-            g.drawString("在线: " + statusResponse.getPlayers().getOnline() + "/" + statusResponse.getPlayers().getMax(), 110, 50);
-            g.drawString("服务端: " + statusResponse.getVersion().getName(), 110, 70);
-            g.drawImage(bufferedImage, 30, 15, this);
+            g.drawString("用时: " + statusResponse.getTime(), 90, 30);
+            g.drawString("在线: " + statusResponse.getPlayers().getOnline() + "/" + statusResponse.getPlayers().getMax(), 90, 50);
+            g.drawString("服务端: " + statusResponse.getVersion().getName(), 90, 70);
+            g.drawImage(bufferedImage, 10, 15, this);
 
         }
 

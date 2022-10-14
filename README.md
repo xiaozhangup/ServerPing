@@ -8,7 +8,8 @@ just found it.
 If you are using Maven just add the following to your `pom.xml`
 
 > This library
-> uses [GitHub Maven Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry)
+>
+uses [GitHub Maven Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry)
 > for its maven repository
 
 ```xml
