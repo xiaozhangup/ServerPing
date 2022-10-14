@@ -8,9 +8,8 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 
-public class TestPing extends Frame{
+public class TestPing extends Frame {
 
     @Test
     public void ping() throws IOException {
@@ -24,7 +23,7 @@ public class TestPing extends Frame{
     @Test
     public void ui() {
         Frame fr = new Frame("Hello");
-        fr.setSize(240,240);
+        fr.setSize(240, 240);
         fr.setBackground(Color.white);
         MenuBar bar = new MenuBar();
         Menu menu = new Menu("刷新");
