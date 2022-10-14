@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -65,6 +64,8 @@ public class Ping implements WindowListener {
         fr.addWindowListener(this);
         fr.setResizable(false);
         fr.setUndecorated(true);
+        fr.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+        fr.setLocation(100, 100);
 
         fr.addMouseListener(new MouseAdapter() {
             @Override
