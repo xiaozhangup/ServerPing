@@ -16,9 +16,7 @@ import java.util.Base64;
 public class Ping implements WindowListener {
 
     public static final TextRender COMP = new TextRender();
-    public static final InetSocketAddress HOST = new InetSocketAddress("k1.dimc.link", 23001);
     private static final JFrame fr = new JFrame("Sevrer Status");
-    private static final ServerPing ping = new ServerPing(HOST);
     private static StatusResponse statusResponse;
     private static BufferedImage bufferedImage;
 
@@ -85,7 +83,7 @@ public class Ping implements WindowListener {
     }
 
     public static void main(String[] args) throws IOException {
-
+        ServerPing ping = new ServerPing(new InetSocketAddress("k1.dimc.link", 23001));
         statusResponse = ping.fetchData();
 
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(Base64.getDecoder().decode(statusResponse.getFavicon().replace("data:image/png;base64,", "")));
